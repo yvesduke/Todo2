@@ -8,7 +8,7 @@
 import Foundation
 
 struct Todo: Codable {
-    let userId, id: Int
-    let title: String
-    let completed: Bool
+    let userId, id: Int?
+    let title: String?
+    let completed: Bool?
 }

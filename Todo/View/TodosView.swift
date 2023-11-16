@@ -21,13 +21,31 @@ struct TodosView: View {
         NavigationStack(path: $path) {
             
             VStack {
-                Text("Todos")
-                    .font(.title)
-                    .padding()
                 
-                List(todoVm.todos, id: \.id) { todo in
+                Text("Newly Added Todo:")
+                    .font(.title3)
+                    .padding()
+                    .foregroundColor(.blue)
+                List(todoVm.lcTodos, id: \.id) { todo in
                     Text(todo.title)
                 }
+//                .onAppear{
+//                    todoVm.getLocalTodos()
+//                }
+
+                
+                Divider()
+                
+                Text("Old Todos")
+                    .font(.title3)
+                    .padding()
+                    .foregroundColor(.blue)
+                
+                List(todoVm.todos, id: \.id) { todo in
+                    Text(todo.title ?? "")
+                }
+                
+                
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -41,7 +59,6 @@ struct TodosView: View {
                     EditButton()
                 }
             }
-            .navigationTitle(Text(LocalizedStringKey("Notes")))
             .navigationDestination(for: NavigationTrack.self) { page in
                 switch page {
                 case .addTodos:
@@ -50,9 +67,9 @@ struct TodosView: View {
             }
             .onAppear {
                 todoVm.getTodos()
+                todoVm.getLocalTodos()
             }
         }
-        
     }
 }
 

@@ -11,9 +11,10 @@ import Foundation
 struct AddTodoView: View {
     
     @State var title: String = ""
-    @State var id: Int = 0
-    @State var userId: Int = 0
+    @State var id: Int = 9
+    @State var userId: Int = 9
     @State var completed: Bool = false
+    
     @Binding var path: [NavigationTrack]
     @StateObject var todoVm = TodoViewModel()
     
@@ -40,7 +41,6 @@ struct AddTodoView: View {
     private func saveTodos() {
         if !title.isEmpty {
             withAnimation {
-                print("Added new todo")
                 todoVm.addTodo(Todo(userId: userId, id: id, title: title, completed: completed))
                 path.removeLast()
             }
