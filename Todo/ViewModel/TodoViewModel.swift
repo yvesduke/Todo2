@@ -9,54 +9,15 @@ import Combine
 import Foundation
 import SwiftUI
 
-let endPoint = "https://jsonplaceholder.typicode.com/"
-
+let endPoint = "https://62bc4a356b1401736cf7083b.mockapi.io/"
 
 final class TodoViewModel: ObservableObject {
-    
+
     @Published var todos: [Todo] = []
-//    @Published var localTodos: [LocalTodo]?
     @Published var error: NetworkError?
-    
-    let defaults = UserDefaults.standard
-    @Published var lcTodos: [LocalTodo] = []
-        
-    func getTodo(withID id : Int) {
-        
-        let urlString = endPoint + "todos/\(id)"
-        
-        if let url = URL.init(string: urlString) {
-            let task = URLSession.shared.dataTask(with: url) { data, response, error in
-                
-                if let _ = error {
-                    self.error = .apiError
-                    print("===>:\(String(describing: error))")
-                    return
-                }
-                
-                if let data = data {
-                    do {
-                        let newTodos = try JSONDecoder().decode([Todo].self, from: data)
-                        DispatchQueue.main.async {
-                            self.todos = newTodos
-                            self.error = nil
-                        }
-                    } catch {
-                        DispatchQueue.main.async {
-                            self.error = .apiError
-                            print("Error decoding JSON: \(error)")
-                        }
-                    }
-                }
-            }
-            task.resume()
-        }
-    }
-    
+
     func getTodos() {
-        
-        let urlString = endPoint + "todos/"
-        
+        let urlString = endPoint + "todo/"
         if let url = URL(string: urlString) {
             let task = URLSession.shared.dataTask(with: url) { data, response, error in
                 
@@ -65,12 +26,10 @@ final class TodoViewModel: ObservableObject {
                     print("===>:\(String(describing: error))")
                     return
                 }
-                
                 if let data = data {
                     do {
                         let newTodos = try JSONDecoder().decode([Todo].self, from: data)
                         DispatchQueue.main.async {
-                            // add newly added todo in the the new list or add it innto a user default
                             self.todos = newTodos
                             self.error = nil
                         }
@@ -86,109 +45,99 @@ final class TodoViewModel: ObservableObject {
         }
     }
     
-    private func decodeMixedDictionary(from jsonString: String, todo: Todo) throws -> [String: Todo] {
-        guard let jsonData = jsonString.data(using: .utf8) else {
-            throw NetworkError.parsingError
-        }
-        do {
-            if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
-                var resultDictionary: [String: Todo] = [:]
-                for (key, value) in jsonObject {
-                    if value is Int {
-                        resultDictionary[key] = todo
-                    } else if let todoDict = value as? [String: Any],
-                              let todoData = try? JSONSerialization.data(withJSONObject: todoDict),
-                              let todo = try? JSONDecoder().decode(Todo.self, from: todoData) {
-                        resultDictionary[key] = todo
-                    }
-                }
-                return resultDictionary
-            } else {
-                throw NetworkError.parsingError
-            }
-        } catch {
-            throw error
-        }
-    }
-
-    
-    func getLocalTodos() {
-        if let decodedTodo = try? JSONDecoder().decode([LocalTodo].self, from: defaults.object(forKey: "Todos") as? Data ?? Data()) {
-            self.lcTodos = decodedTodo
-        }
-    }
-    
     
     func addTodo(_ request: Todo) {
-        let urlString = endPoint + "todos"
+        let urlString = endPoint + "todo"
         var req = URLRequest.init(url: URL.init(string: urlString)!)
         req.httpMethod = "POST"
-        req.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        req.setValue("application/json", forHTTPHeaderField: "Accept")
-        req.httpBody = try? JSONEncoder().encode(request)
+        req.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted // makes json data more readable
+        
+        do {
+            let jsonData = try encoder.encode(request)
+            req.httpBody = jsonData
+        } catch {
+            print("Error  encodin todo object: \(error)")
+        }
         let task = URLSession.shared.dataTask(with: req) { (data, response, error) in
-            
-            if let _ = error {
+
+            if let error = error {
                 self.error = .apiError
                 print("===>:\(String(describing: error))")
-                return
-            }
-            
-            if let data = data {
-                let newTodo = String(data: data, encoding: .ascii)
-                if let newTodo = newTodo {
-                    do {
-                        let decodedDictionary = try self.decodeMixedDictionary(from: newTodo, todo: Todo(userId: request.userId, id: request.id, title: request.title, completed: request.completed))
-                        
-                        for (_, value) in decodedDictionary {
-                            if let title = value.title {
-                                DispatchQueue.main.async {
-                                    localTodos.append(LocalTodo(title: title))
-                                    
-                                    if let encodedTodo = try? JSONEncoder().encode(localTodos) {
-                                        self.defaults.set(encodedTodo, forKey: "Todos")
-                                    }
-                                }
-                            }
-                        }
-                    } catch {
-                        print("error \(error)")
-                    }
-                }
+            } else if let data = data {
+                let responseString = String(data: data, encoding: .utf8)
             }
         }
         task.resume()
     }
     
     
-    func updateTodo(id: Int) {
-        print("Attempting to Update a todo")
-//        let urlString = endPoint + "todos/\(id)"
-//
-//        var req = URLRequest.init(url: URL.init(string: urlString)!)
-//        req.httpMethod = "PUT"
-//        req.httpBody = try? JSONEncoder().encode()
-//
-//        let task = URLSession.shared.dataTask(with: req) { (data, response, error) in
-//            print (String.init(data: data!, encoding: .ascii) ?? "no data")
-//        }
-//        task.resume()
-    }
+
     
-    func deleteTodo(id: Int) {
+    func updateTodo(todo: Todo) {
         
-        print("Attempting to delete a todo")
-//        let urlString = endPoint + "todos/\(id)"
-//
-//        var req = URLRequest.init(url: URL.init(string: urlString)!)
-//        req.httpMethod = "DELETE"
-//
-//        let task = URLSession.shared.dataTask(with: req) { (data, response, error) in
-//            print (String.init(data: data!, encoding: .ascii) ?? "no data")
-//        }
-//        task.resume()
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        
+        do {
+            let urlString = endPoint + "todos/\(todo.id)"
+            let jsonData = try encoder.encode(todo)
+            var req = URLRequest.init(url: URL.init(string: urlString)!)
+            req.httpMethod = "PUT"
+            req.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            req.httpBody = jsonData
+            
+            let task = URLSession.shared.dataTask(with: req) { (data, response, error) in
+                if let error = error {
+                    self.error = .apiError
+                    print(error)
+                } else if let data = data {
+                    let responseString = String(data: data, encoding: .utf8)
+                    print("Response: \(responseString ?? "")")
+                    self.error = nil
+                    self.getTodos()
+                }
+//                if let response = response as? HTTPURLResponse, 200  ~= response.statusCode {
+//                    print("Delete response is Successfuly : \(response.statusCode)")
+//                    self.getTodos()
+//                    DispatchQueue.main.async {
+//                        self.error = nil
+//                    }
+//                } else {
+//                    DispatchQueue.main.async {
+//                        self.error = .invalidURL
+//                    }
+//                }
+            }
+            task.resume()
+        } catch {
+            print("Error encoding Todo object: \(error)")
+        }
     }
     
     
+    func deleteTodo(id: String) {
+        
+        print("Attempting to delete a todo with an Id : \(id)")
+        let urlString = endPoint + "todo/\(id)"
+        var req = URLRequest.init(url: URL.init(string: urlString)!)
+        req.httpMethod = "DELETE"
+
+        let task = URLSession.shared.dataTask(with: req) { (data, response, error) in
+            if let response = response as? HTTPURLResponse, 200  ~= response.statusCode {
+                print("Delete response is Successfuly : \(response.statusCode)")
+                self.getTodos()
+                DispatchQueue.main.async {
+                    self.error = nil
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.error = .invalidURL
+                }
+            }
+        }
+        task.resume()
+    }
 }

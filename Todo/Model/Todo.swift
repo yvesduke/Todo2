@@ -8,7 +8,11 @@
 import Foundation
 
 struct Todo: Codable {
-    let userId, id: Int?
-    let title: String?
-    let completed: Bool?
+    let createdAt: String
+    var title, Description: String
+    let Completed: Bool
+    let id: String
 }
+
+extension Todo: Identifiable {}
+

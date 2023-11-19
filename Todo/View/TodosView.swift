@@ -22,30 +22,35 @@ struct TodosView: View {
             
             VStack {
                 
-                Text("Newly Added Todo:")
+                Text("Added Todo:")
                     .font(.title3)
                     .padding()
                     .foregroundColor(.blue)
-                List(todoVm.lcTodos, id: \.id) { todo in
-                    Text(todo.title)
-                }
-//                .onAppear{
-//                    todoVm.getLocalTodos()
-//                }
-
-                
                 Divider()
-                
-                Text("Old Todos")
-                    .font(.title3)
-                    .padding()
-                    .foregroundColor(.blue)
-                
-                List(todoVm.todos, id: \.id) { todo in
-                    Text(todo.title ?? "")
+                List {
+                    ForEach(todoVm.todos, id: \.id) { todo in
+                        NavigationLink {
+//                            Text(todo.title)
+//                            Text(todo.Description)
+                            EditTodoView(todo: .constant(todo))
+                        } label: {
+                            HStack {
+                                VStack {
+                                    VStack(alignment: .leading) {
+                                        Text(todo.title)
+                                        
+                                    }
+                                    Spacer()
+                                }
+                            }
+                        }
+                   }.onDelete { indexSet in
+                       if let firstIndex = indexSet.first {
+                           let itemIdToDelete = todoVm.todos[firstIndex].id
+                           todoVm.deleteTodo(id: itemIdToDelete)
+                       }
+                   }
                 }
-                
-                
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -67,7 +72,6 @@ struct TodosView: View {
             }
             .onAppear {
                 todoVm.getTodos()
-                todoVm.getLocalTodos()
             }
         }
     }
