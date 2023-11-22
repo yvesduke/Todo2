@@ -21,28 +21,15 @@ struct TodosView: View {
         NavigationStack(path: $path) {
             
             VStack {
-                
-                Text("Added Todo:")
+                Text("Todos :")
                     .font(.title3)
                     .padding()
                     .foregroundColor(.blue)
                 Divider()
                 List {
-                    ForEach(todoVm.todos, id: \.id) { todo in
-                        NavigationLink {
-//                            Text(todo.title)
-//                            Text(todo.Description)
-                            EditTodoView(todo: .constant(todo))
-                        } label: {
-                            HStack {
-                                VStack {
-                                    VStack(alignment: .leading) {
-                                        Text(todo.title)
-                                        
-                                    }
-                                    Spacer()
-                                }
-                            }
+                    ForEach(todoVm.todos.indices, id: \.self) { todoIndex in
+                        NavigationLink(destination: EditTodoView(todo: $todoVm.todos[todoIndex])) {
+                            Text(todoVm.todos[todoIndex].title)
                         }
                    }.onDelete { indexSet in
                        if let firstIndex = indexSet.first {
@@ -59,9 +46,6 @@ struct TodosView: View {
                     } label: {
                         Label("Add Todo", systemImage: "plus")
                     }
-                }
-                ToolbarItem(placement: .navigationBarLeading) {
-                    EditButton()
                 }
             }
             .navigationDestination(for: NavigationTrack.self) { page in

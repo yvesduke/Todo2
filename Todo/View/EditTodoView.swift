@@ -12,7 +12,7 @@ struct EditTodoView: View {
     @Binding var todo: Todo
     
     @StateObject var todoVm = TodoViewModel()
-
+    @State var isCompleted = false
     
     var body: some View {
         
@@ -25,7 +25,7 @@ struct EditTodoView: View {
             ZStack(alignment: .topLeading) {
                 TextEditor(text: $todo.Description)
                     .padding()
-                    .frame(height:200.0)
+//                    .frame(height:200.0)
                     .background(Color.gray.opacity(0.2))
                     .cornerRadius(8)
                     .padding(.horizontal)
@@ -40,12 +40,26 @@ struct EditTodoView: View {
 //                    }
                 }
             }
+            Toggle("Completed", isOn: $isCompleted)
+                .onTapGesture {
+                    isCompleted.toggle()
+                }
         }.padding()
+            .toolbar {
+                ToolbarItem {
+                    Button(action: saveTodo) {
+                        Text("Save")
+                    }
+                }
+            }
         
         Spacer()
     }
     
-    
+    private func saveTodo() {
+//        print("Updated todo ID : \(todo.id)")
+        todoVm.updateTodo(todo: Todo(createdAt: todo.createdAt, title: todo.title, Description: todo.Description, Completed: isCompleted, id: todo.id))
+    }
 }
 
 //struct EditTodoView_Previews: PreviewProvider {

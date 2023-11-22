@@ -82,7 +82,7 @@ final class TodoViewModel: ObservableObject {
         encoder.outputFormatting = .prettyPrinted
         
         do {
-            let urlString = endPoint + "todos/\(todo.id)"
+            let urlString = endPoint + "todo/\(todo.id)"
             let jsonData = try encoder.encode(todo)
             var req = URLRequest.init(url: URL.init(string: urlString)!)
             req.httpMethod = "PUT"
@@ -96,8 +96,11 @@ final class TodoViewModel: ObservableObject {
                 } else if let data = data {
                     let responseString = String(data: data, encoding: .utf8)
                     print("Response: \(responseString ?? "")")
-                    self.error = nil
-                    self.getTodos()
+                    DispatchQueue.main.async {
+                        self.error = nil
+                        print("Todo Updated Successfuly !")
+                    }
+//                    self.getTodos()
                 }
 //                if let response = response as? HTTPURLResponse, 200  ~= response.statusCode {
 //                    print("Delete response is Successfuly : \(response.statusCode)")
