@@ -11,7 +11,14 @@ import SwiftUI
 
 let endPoint = "https://62bc4a356b1401736cf7083b.mockapi.io/"
 
-final class TodoViewModel: ObservableObject {
+protocol Networkable {
+    func getTodos()
+    func addTodo(_ request: Todo)
+    func updateTodo(todo: Todo)
+    func deleteTodo(id: String)
+}
+
+final class TodoViewModel: ObservableObject, Networkable {
 
     @Published var todos: [Todo] = []
     @Published var error: NetworkError?
@@ -100,7 +107,6 @@ final class TodoViewModel: ObservableObject {
                         self.error = nil
                         print("Todo Updated Successfuly !")
                     }
-//                    self.getTodos()
                 }
 //                if let response = response as? HTTPURLResponse, 200  ~= response.statusCode {
 //                    print("Delete response is Successfuly : \(response.statusCode)")

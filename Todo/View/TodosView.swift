@@ -20,42 +20,51 @@ struct TodosView: View {
         
         NavigationStack(path: $path) {
             
-            VStack {
-                Text("Todos :")
-                    .font(.title3)
-                    .padding()
-                    .foregroundColor(.blue)
-                Divider()
-                List {
-                    ForEach(todoVm.todos.indices, id: \.self) { todoIndex in
-                        NavigationLink(destination: EditTodoView(todo: $todoVm.todos[todoIndex])) {
-                            Text(todoVm.todos[todoIndex].title)
-                        }
-                   }.onDelete { indexSet in
-                       if let firstIndex = indexSet.first {
-                           let itemIdToDelete = todoVm.todos[firstIndex].id
-                           todoVm.deleteTodo(id: itemIdToDelete)
+            if todoVm.error == nil {
+                VStack {
+                    Text("Todos")
+                        .font(.title3)
+                        .padding()
+                        .foregroundColor(.blue)
+                    Divider()
+                    List {
+                        ForEach(todoVm.todos.indices, id: \.self) { todoIndex in
+                            NavigationLink(destination: EditTodoView(todo: $todoVm.todos[todoIndex])) {
+                                Text(todoVm.todos[todoIndex].title)
+                            }
+                       }.onDelete { indexSet in
+                           if let firstIndex = indexSet.first {
+                               let itemIdToDelete = todoVm.todos[firstIndex].id
+                               todoVm.deleteTodo(id: itemIdToDelete)
+                           }
                        }
-                   }
-                }
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        path.append(.addTodos)
-                    } label: {
-                        Label("Add Todo", systemImage: "plus")
                     }
                 }
-            }
-            .navigationDestination(for: NavigationTrack.self) { page in
-                switch page {
-                case .addTodos:
-                    AddTodoView(path: $path)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            path.append(.addTodos)
+                        } label: {
+                            Label("Add Todo", systemImage: "plus")
+                        }
+                    }
                 }
-            }
-            .onAppear {
-                todoVm.getTodos()
+                .navigationDestination(for: NavigationTrack.self) { page in
+                    switch page {
+                    case .addTodos:
+                        AddTodoView(path: $path)
+                    }
+                }
+                .onAppear {
+                    todoVm.getTodos()
+                }
+                
+                
+            } else {
+                ProgressView().alert(isPresented: .constant(true)){
+                    Alert(title: Text("Error Occured"),message: Text("Something went wrong, Please try again later!"),
+                          dismissButton: .default(Text("Ok")))
+                }
             }
         }
     }
