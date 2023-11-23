@@ -14,9 +14,8 @@ struct AddTodoView: View {
     @State var description: String = ""
     
     @Binding var path: [NavigationTrack]
-    @StateObject var todoVm = TodoViewModel()
-    
-    
+    @StateObject var todoVm = TodoViewModel(networkManager: NetworkManager())
+
     var body: some View {
         
         VStack {

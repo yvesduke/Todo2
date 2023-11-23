@@ -11,7 +11,7 @@ import SwiftUI
 struct TodoApp: App {
     var body: some Scene {
         WindowGroup {
-            TodosView()
+            TodosView(todoVm: TodoViewModel(networkManager: NetworkManager()))
         }
     }
 }

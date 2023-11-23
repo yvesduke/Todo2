@@ -19,6 +19,7 @@
 		0076A0D82B04E30900694310 /* AddTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0076A0D72B04E30900694310 /* AddTodoView.swift */; };
 		0076A0DA2B054C4D00694310 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0076A0D92B054C4D00694310 /* NetworkError.swift */; };
 		0076A0E32B09838400694310 /* EditTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0076A0E22B09838400694310 /* EditTodoView.swift */; };
+		00B29B512B0F604B00674233 /* NetworkManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B29B502B0F604B00674233 /* NetworkManage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,8 @@
 		0076A0D72B04E30900694310 /* AddTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTodoView.swift; sourceTree = "<group>"; };
 		0076A0D92B054C4D00694310 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		0076A0E22B09838400694310 /* EditTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTodoView.swift; sourceTree = "<group>"; };
+		00B29B4F2B0F5F8F00674233 /* TodoData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TodoData.json; sourceTree = "<group>"; };
+		00B29B502B0F604B00674233 /* NetworkManage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +107,7 @@
 		0076A07D2B03983B00694310 /* Todo */ = {
 			isa = PBXGroup;
 			children = (
+				00B29B4C2B0F5EE500674233 /* Network */,
 				0076A0AA2B03A01900694310 /* View */,
 				0076A0A92B03A01000694310 /* ViewModel */,
 				0076A0A82B03A00900694310 /* Model */,
@@ -125,6 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				0076A08F2B03983C00694310 /* TodoTests.swift */,
+				00B29B4F2B0F5F8F00674233 /* TodoData.json */,
 			);
 			path = TodoTests;
 			sourceTree = "<group>";
@@ -164,6 +169,14 @@
 				0076A0E22B09838400694310 /* EditTodoView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		00B29B4C2B0F5EE500674233 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				00B29B502B0F604B00674233 /* NetworkManage.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -297,6 +310,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0076A0B42B03FF7800694310 /* TodoViewModel.swift in Sources */,
+				00B29B512B0F604B00674233 /* NetworkManage.swift in Sources */,
 				0076A0E32B09838400694310 /* EditTodoView.swift in Sources */,
 				0076A0DA2B054C4D00694310 /* NetworkError.swift in Sources */,
 				0076A0D82B04E30900694310 /* AddTodoView.swift in Sources */,

@@ -13,7 +13,7 @@ enum NavigationTrack {
 
 struct TodosView: View {
     
-    @ObservedObject var todoVm = TodoViewModel()
+    @ObservedObject var todoVm: TodoViewModel
     @State var path: [NavigationTrack] = []
     
     var body: some View {
@@ -29,7 +29,7 @@ struct TodosView: View {
                     Divider()
                     List {
                         ForEach(todoVm.todos.indices, id: \.self) { todoIndex in
-                            NavigationLink(destination: EditTodoView(todo: $todoVm.todos[todoIndex])) {
+                            NavigationLink(destination: EditTodoView(todo: $todoVm.todos[todoIndex], todoVm: TodoViewModel(networkManager: NetworkManager()))) {
                                 Text(todoVm.todos[todoIndex].title)
                             }
                        }.onDelete { indexSet in
@@ -52,7 +52,7 @@ struct TodosView: View {
                 .navigationDestination(for: NavigationTrack.self) { page in
                     switch page {
                     case .addTodos:
-                        AddTodoView(path: $path)
+                        AddTodoView(path: $path, todoVm: TodoViewModel(networkManager: NetworkManager()))
                     }
                 }
                 .onAppear {
@@ -72,6 +72,6 @@ struct TodosView: View {
 
 struct TodosView_Previews: PreviewProvider {
     static var previews: some View {
-        TodosView()
+        TodosView(todoVm: TodoViewModel(networkManager: NetworkManager()))
     }
 }
