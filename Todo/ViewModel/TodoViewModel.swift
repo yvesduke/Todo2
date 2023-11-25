@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 final class TodoViewModel: ObservableObject {
     
     @Published var todos: [Todo] = []

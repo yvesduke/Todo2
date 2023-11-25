@@ -20,6 +20,7 @@
 		0076A0DA2B054C4D00694310 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0076A0D92B054C4D00694310 /* NetworkError.swift */; };
 		0076A0E32B09838400694310 /* EditTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0076A0E22B09838400694310 /* EditTodoView.swift */; };
 		00B29B512B0F604B00674233 /* NetworkManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B29B502B0F604B00674233 /* NetworkManage.swift */; };
+		00C1AAC12B0FAAEC00E38F87 /* MockedTodoNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C1AAC02B0FAAEC00E38F87 /* MockedTodoNetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,8 +56,8 @@
 		0076A0D72B04E30900694310 /* AddTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTodoView.swift; sourceTree = "<group>"; };
 		0076A0D92B054C4D00694310 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		0076A0E22B09838400694310 /* EditTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTodoView.swift; sourceTree = "<group>"; };
-		00B29B4F2B0F5F8F00674233 /* TodoData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TodoData.json; sourceTree = "<group>"; };
 		00B29B502B0F604B00674233 /* NetworkManage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManage.swift; sourceTree = "<group>"; };
+		00C1AAC02B0FAAEC00E38F87 /* MockedTodoNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedTodoNetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,7 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				0076A08F2B03983C00694310 /* TodoTests.swift */,
-				00B29B4F2B0F5F8F00674233 /* TodoData.json */,
+				00C1AAC02B0FAAEC00E38F87 /* MockedTodoNetworkManager.swift */,
 			);
 			path = TodoTests;
 			sourceTree = "<group>";
@@ -325,6 +326,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0076A0902B03983C00694310 /* TodoTests.swift in Sources */,
+				00C1AAC12B0FAAEC00E38F87 /* MockedTodoNetworkManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
